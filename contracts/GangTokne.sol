@@ -389,7 +389,7 @@ contract PausableToken is StandardToken, Pausable {
 }
 
 /**
- * @title ERC20 Token
+ * @title GANGToken Token
  */
 contract GANGToken is PausableToken, MintableToken {
     using SafeMath for uint256;
