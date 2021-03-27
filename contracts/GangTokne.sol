@@ -276,7 +276,7 @@ contract StandardToken is BasicToken, ERC20 {
 }
 
 /**
- * @title Mintable token
+ * @title Mintable toke
  * @dev Simple ERC20 Token example, with mintable token creation
  * @dev Issue: * https://github.com/OpenZeppelin/zeppelin-solidity/issues/120
  * Based on code by TokenMarketNet: https://github.com/TokenMarketNet/ico/blob/master/contracts/MintableToken.sol
@@ -389,12 +389,12 @@ contract PausableToken is StandardToken, Pausable {
 }
 
 /**
- * @title GANGToken Token
+ * @title GANGPortToken Token
  */
-contract GANGToken is PausableToken, MintableToken {
+contract GANGPortToken is PausableToken, MintableToken {
     using SafeMath for uint256;
 
-    string public name = "GANGToken";
-    string public symbol = "GANG";
+    string public name = "GANGPortToken";
+    string public symbol = "GPT";
     uint256 public decimals = 0;
 }

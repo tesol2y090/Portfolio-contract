@@ -10,7 +10,7 @@ contract MessagesPool {
 
     IGANGToken public gangTokenModule;
 
-    constructor(IGANGToken _GANGTokenAddress) {
+    constructor(IGANGToken _GANGTokenAddress) public {
         gangTokenModule = _GANGTokenAddress;
     }
 
@@ -22,7 +22,7 @@ contract MessagesPool {
         require(!isWriteMessage[msg.sender], "you are post already");
         messagesPool.push(message);
         isWriteMessage[msg.sender] = true;
-        gangTokenModule.transfer(msg.sender, 1);
+        gangTokenModule.mint(msg.sender, 1);
         emit PostSucceed(msg.sender, message);
     }
 }
