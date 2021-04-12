@@ -1,17 +1,24 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.6.9;
 
-import "./IGANGToken.sol";
+import "./interfaces/IGANGToken.sol";
+import "./interfaces/IRewardsToken.sol";
+import "./utility/Ownable.sol";
 
-contract MessagesPool {
+contract MessagesPool is Ownable {
     string[] public messagesPool;
     mapping(address => bool) isWriteMessage;
 
-    event PostSucceed(address user, string message);
-
     IGANGToken public gangTokenModule;
+    IRewardsToken public rewardsTokenModule;
+
+    event PostSucceed(address user, string message);
 
     constructor(IGANGToken _GANGTokenAddress) public {
         gangTokenModule = _GANGTokenAddress;
+    }
+
+    function setRewardTokenAddress(IRewardsToken _rewardsTokenAddress) public {
+        rewardsTokenModule = _rewardsTokenAddress;
     }
 
     function getMessagesLength() public view returns (uint256) {

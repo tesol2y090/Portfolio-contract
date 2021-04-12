@@ -1,5 +1,5 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.6.9;
 
-interface IGANGToken {
+interface IRewardsToken {
     function transfer(address to, uint256 value) external;
 }

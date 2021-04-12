@@ -1,20 +1,24 @@
-const GANGToken = artifacts.require("GANGToken")
+const GANGPortToken = artifacts.require("GANGPortToken")
 
-contract("GANGToken", (accounts) => {
+contract("GANGPortToken", (accounts) => {
   beforeEach(async () => {
-    this.tokenInstance = await GANGToken.new()
+    this.tokenInstance = await GANGPortToken.new()
   })
 
   it("Name of token", async () => {
     const tokenInstance = await this.tokenInstance
     const nameToken = await tokenInstance.name()
-    assert.equal(nameToken.valueOf(), "GANGToken", "It should be a GANGToken")
+    assert.equal(
+      nameToken.valueOf(),
+      "GANGPortToken",
+      "It should be a GANGToken"
+    )
   })
 
   it("Symbol of token", async () => {
     const tokenInstance = this.tokenInstance
     const sysmbol = await tokenInstance.symbol()
-    assert.equal(sysmbol.valueOf(), "GANG", "It should be GANG")
+    assert.equal(sysmbol.valueOf(), "GPT", "It should be GANG")
   })
 
   it("Total supply of token", async () => {

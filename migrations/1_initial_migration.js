@@ -1,7 +1,5 @@
-const MessagesPool = artifacts.require("MessagesPool")
-const GangToken = artifacts.require("GANGToken")
+const Migrations = artifacts.require("Migrations")
 
 module.exports = function (deployer) {
-  deployer.deploy(MessagesPool)
-  deployer.deploy(GangToken)
+  // deployer.deploy(Migrations);
 }
