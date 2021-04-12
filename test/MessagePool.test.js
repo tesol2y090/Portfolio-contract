@@ -1,14 +1,27 @@
 const MessagesPool = artifacts.require("MessagesPool")
-const GANGToken = artifacts.require("GANGPortToken")
+const GANGPortToken = artifacts.require("GANGPortToken")
+const RewardToken = artifacts.require("RewardToken")
 
 contract("MessagesPool", (accounts) => {
+  const admin = accounts[0]
+  const alice = accounts[1]
+  const bob = accounts[2]
+
   beforeEach(async () => {
-    this.tokenInstance = await GANGToken.new()
+    this.gangPortTokenInstance = await GANGPortToken.new()
+    this.rewardTokenInstance = await RewardToken.new()
     this.messagesPoolInstance = await MessagesPool.new(
-      this.tokenInstance.address
+      this.gangPortTokenInstance.address
     )
-    await this.tokenInstance.transferOwnership(
+    await this.gangPortTokenInstance.transferOwnership(
       this.messagesPoolInstance.address
+    )
+    await this.messagesPoolInstance.setRewardTokenAddress(
+      this.rewardTokenInstance.address
+    )
+    await this.rewardTokenInstance.transfer(
+      this.messagesPoolInstance.address,
+      100
     )
   })
 
@@ -20,21 +33,32 @@ contract("MessagesPool", (accounts) => {
 
   it("Post message success", async () => {
     const messagesPoolInstance = this.messagesPoolInstance
-    await messagesPoolInstance.postMessage("Hello world", {
-      from: accounts[0],
+    const gangPortTokenInstance = this.gangPortTokenInstance
+    const postedMessage = "Hello world"
+    await messagesPoolInstance.postMessage(postedMessage, {
+      from: admin,
     })
     const allMessagesLength = await messagesPoolInstance.getMessagesLength.call()
+    const postAddressBalance = await gangPortTokenInstance.balanceOf(admin)
+    const firstMessage = await messagesPoolInstance.messagesPool(0)
     assert.equal(allMessagesLength.valueOf(), 1, "Message does not equal to 1")
+    assert.equal(postAddressBalance.valueOf(), 1, "Balance does not equal to 1")
+    assert.equal(
+      firstMessage.valueOf(),
+      postedMessage,
+      `Message does not equal to ${postedMessage}`
+    )
   })
 
-  // it("Post message hello wolrd", async () => {
-  //   const messagesPoolInstance = this.messagesPoolInstance
-  //   await messagesPoolInstance.postMessage("Hello world", { from: accounts[0] })
-  //   const helloMessage = await messagesPoolInstance.messagesPool(0)
-  //   assert.equal(
-  //     helloMessage.valueOf(),
-  //     "Hello world",
-  //     "Message does not equal to hello world"
-  //   )
-  // })
+  it("Claim reward token", async () => {
+    const messagesPoolInstance = this.messagesPoolInstance
+    const rewardTokenInstance = this.rewardTokenInstance
+    const postedMessage = "Hello world"
+    await messagesPoolInstance.postMessage(postedMessage, {
+      from: admin,
+    })
+    await messagesPoolInstance.claimsReward()
+    const rewardBalance = await rewardTokenInstance.balanceOf(admin)
+    assert.equal(rewardBalance.valueOf(), 1, "Reward does not equal to 1")
+  })
 })
