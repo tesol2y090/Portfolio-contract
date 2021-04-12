@@ -1,5 +1,9 @@
 pragma solidity 0.6.9;
 
 interface IRewardsToken {
-    function transfer(address to, uint256 value) external;
+    function balanceOf(address account) external view returns (uint256);
+
+    function transfer(address recipient, uint256 amount)
+        external
+        returns (bool);
 }
