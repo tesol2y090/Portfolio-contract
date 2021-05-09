@@ -6,6 +6,10 @@ import "./utility/Ownable.sol";
 
 contract MessagesPool is Ownable {
     string[] public messagesPool;
+
+    uint256 public rewardTokenPool;
+    uint256 public totalshares;
+
     mapping(address => bool) isWriteMessage;
     mapping(address => bool) isClaimsReward;
     mapping(address => bool) canClaimReward;
@@ -31,7 +35,12 @@ contract MessagesPool is Ownable {
             rewardsTokenModule.balanceOf(address(this)) > 0,
             "not enough reward token"
         );
-        rewardsTokenModule.transfer(msg.sender, 1);
+        rewardsTokenModule.transfer(
+            msg.sender,
+            (totalRewardToken / totalshares)
+        );
+        totalRewardToken = (totalRewardToken / totalshares);
+        totalshares -= 1;
         emit ClaimSucceed(msg.sender, true);
         isClaimsReward[msg.sender] = true;
     }
@@ -52,6 +61,7 @@ contract MessagesPool is Ownable {
         messagesPool.push(message);
         isWriteMessage[msg.sender] = true;
         gangTokenModule.mint(msg.sender, 1);
+        totalShare += 1;
         emit PostSucceed(msg.sender, message);
     }
 }
